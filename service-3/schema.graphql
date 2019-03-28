@@ -1,0 +1,17 @@
+type Payment{
+  _id:ID!
+  paymentId:Int!,
+  orderId: Int,
+  paid: Int,
+  gst: Int,
+  paymentType: String,
+  cardType:String,
+  cardNumber: Int,
+  transactionId:Int,
+  transationStatus: Int,
+  paymentReferenceNumber: Int,
+  createdDate:String
+}
+
+
+

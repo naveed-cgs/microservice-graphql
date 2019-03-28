@@ -1,0 +1,4 @@
+{
+    "orderApp": "http://localhost:8082",
+    "paymentApp": "http://localhost:8083"
+}

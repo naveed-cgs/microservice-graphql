@@ -1,0 +1,35 @@
+{
+  "name": "service-3",
+  "version": "1.0.0",
+  "description": "Example of a single instance of a GraphQL microservice",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "keywords": [
+    "GraphQL",
+    "Microservice",
+    "Express",
+    "NodeJS"
+  ],
+  "author": "Vijendra <skvijay007@gmail.com>",
+  "license": "",
+  "dependencies": {
+    "apollo-server": "^2.4.8",
+    "apollo-server-express": "^2.4.6",
+    "body-parser": "^1.18.2",
+    "dotenv": "^7.0.0",
+    "express": "^4.16.4",
+    "express-graphql": "^0.7.1",
+    "fs": "0.0.1-security",
+    "graphql": "^0.13.2",
+    "graphql-tools": "^2.24.0",
+    "lodash": "^4.17.11",
+    "mysql": "^2.16.0",
+    "neo4j-driver": "^1.7.3",
+    "neo4j-graphql-js": "^2.4.2",
+    "neode": "^0.2.14",
+    "path": "^0.12.7"
+  }
+}

@@ -1,0 +1,18 @@
+type Order{
+  _id:ID!
+  orderId:Int
+  orderDetails:String
+  orderTotalAmt:Int
+  orderDiscountAmt:Int
+  orderGrandTotal:Int
+  status:String
+  isCancelled:Boolean
+  isPaid:Boolean
+  createdBy:Int
+  createdDate:String
+  updatedBy:Int
+  updatedDate:String
+}
+
+
+

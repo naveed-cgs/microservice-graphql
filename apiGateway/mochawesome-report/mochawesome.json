@@ -1,0 +1,193 @@
+{
+  "stats": {
+    "suites": 4,
+    "tests": 4,
+    "passes": 4,
+    "pending": 0,
+    "failures": 0,
+    "start": "2019-03-28T16:21:58.756Z",
+    "end": "2019-03-28T16:22:01.803Z",
+    "duration": 3047,
+    "testsRegistered": 4,
+    "passPercent": 100,
+    "pendingPercent": 0,
+    "other": 0,
+    "hasOther": false,
+    "skipped": 0,
+    "hasSkipped": false,
+    "passPercentClass": "success",
+    "pendingPercentClass": "danger"
+  },
+  "suites": {
+    "uuid": "56df8db7-13af-4c4f-b70d-edaae7e999c6",
+    "title": "",
+    "fullFile": "",
+    "file": "",
+    "beforeHooks": [],
+    "afterHooks": [],
+    "tests": [],
+    "suites": [
+      {
+        "uuid": "9be118f9-0f02-4435-a01e-fc314617c260",
+        "title": "POST /saveOrder",
+        "fullFile": "D:\\GrandStack\\graphql-microservices\\apiGateway\\test\\orderServiceTest.js",
+        "file": "\\test\\orderServiceTest.js",
+        "beforeHooks": [],
+        "afterHooks": [],
+        "tests": [
+          {
+            "title": "Order created",
+            "fullTitle": "POST /saveOrder Order created",
+            "timedOut": false,
+            "duration": 1311,
+            "state": "passed",
+            "speed": "slow",
+            "pass": true,
+            "fail": false,
+            "pending": false,
+            "code": "const data = {\n            orderDetails:\"new test1\",\n            orderTotalAmt:500,\n            orderDiscountAmt:200,\n            orderGrandTotal:300,\n            status:\"created\",\n            isCancelled:false,\n            isPaid:false,\n            createdBy:123,\n            createdDate:\"28-03-2019\",\n            updatedBy:123,\n            updatedDate:\"28-03-2019\"\n            };\n        let res = await chai.request(app).post('/saveOrder').send(data);\nexpect(res).to.have.status(200);\n        orderId = res.body.data[0].data.CreateOrder.orderId;",
+            "err": {},
+            "isRoot": false,
+            "uuid": "8466d524-de5b-4897-b13a-f37fd42e6ab8",
+            "isHook": false,
+            "skipped": false
+          }
+        ],
+        "suites": [],
+        "passes": [
+          "8466d524-de5b-4897-b13a-f37fd42e6ab8"
+        ],
+        "failures": [],
+        "pending": [],
+        "skipped": [],
+        "duration": 1311,
+        "root": false,
+        "rootEmpty": false,
+        "_timeout": 10000
+      },
+      {
+        "uuid": "3450f5ff-befd-4c6b-b2da-3ffe4d7aed5b",
+        "title": "GET /getOrderById -Before Payment Order Status",
+        "fullFile": "D:\\GrandStack\\graphql-microservices\\apiGateway\\test\\orderServiceTest.js",
+        "file": "\\test\\orderServiceTest.js",
+        "beforeHooks": [],
+        "afterHooks": [],
+        "tests": [
+          {
+            "title": "Get Order status by order id before payment = undefined",
+            "fullTitle": "GET /getOrderById -Before Payment Order Status Get Order status by order id before payment = undefined",
+            "timedOut": false,
+            "duration": 636,
+            "state": "passed",
+            "speed": "slow",
+            "pass": true,
+            "fail": false,
+            "pending": false,
+            "code": "//const data = {};\nlet res = await chai.request(app).get('/getOrderById/'+orderId);\nexpect(res).to.have.status(200);\nconsole.log('Order Status  :  '+res.body.data[0].data.Order[0].status);",
+            "err": {},
+            "isRoot": false,
+            "uuid": "17316153-9f66-46d0-94af-325bddce4190",
+            "isHook": false,
+            "skipped": false
+          }
+        ],
+        "suites": [],
+        "passes": [
+          "17316153-9f66-46d0-94af-325bddce4190"
+        ],
+        "failures": [],
+        "pending": [],
+        "skipped": [],
+        "duration": 636,
+        "root": false,
+        "rootEmpty": false,
+        "_timeout": 10000
+      },
+      {
+        "uuid": "90a2e7a4-0e56-4afa-8222-f58b5d709998",
+        "title": "POST /makePayment",
+        "fullFile": "D:\\GrandStack\\graphql-microservices\\apiGateway\\test\\orderServiceTest.js",
+        "file": "\\test\\orderServiceTest.js",
+        "beforeHooks": [],
+        "afterHooks": [],
+        "tests": [
+          {
+            "title": "Payment done",
+            "fullTitle": "POST /makePayment Payment done",
+            "timedOut": false,
+            "duration": 435,
+            "state": "passed",
+            "speed": "slow",
+            "pass": true,
+            "fail": false,
+            "pending": false,
+            "code": "const data = {\n            orderId:\"5c9a179363145358e8c1c88e\",\n            paid:200,\n            gst:2,\n            paymentType:\"card\",\n            cardType:\"Visa\",\n            cardNumber:224352387,\n            transactionId:254255,\n            transationStatus:\"Success\",\n            paymentReferenceNumber:\"245541254ac\"\n        };\nlet res = await chai.request(app).post('/makePayment').send(data);\n        expect(res).to.have.status(200);\nlet afterPaymentvar=await afterPayment();",
+            "err": {},
+            "isRoot": false,
+            "uuid": "22222d3c-4050-4a8a-b217-df884d8aa2e4",
+            "isHook": false,
+            "skipped": false
+          }
+        ],
+        "suites": [],
+        "passes": [
+          "22222d3c-4050-4a8a-b217-df884d8aa2e4"
+        ],
+        "failures": [],
+        "pending": [],
+        "skipped": [],
+        "duration": 435,
+        "root": false,
+        "rootEmpty": false,
+        "_timeout": 10000
+      },
+      {
+        "uuid": "dbf91ab5-02b1-45fe-a071-ae37e0eb8157",
+        "title": "GET /getOrderById -After Payment Order Status",
+        "fullFile": "D:\\GrandStack\\graphql-microservices\\apiGateway\\test\\orderServiceTest.js",
+        "file": "\\test\\orderServiceTest.js",
+        "beforeHooks": [],
+        "afterHooks": [],
+        "tests": [
+          {
+            "title": "Get Order status by order id after payment = 23",
+            "fullTitle": "GET /getOrderById -After Payment Order Status Get Order status by order id after payment = 23",
+            "timedOut": false,
+            "duration": 625,
+            "state": "passed",
+            "speed": "slow",
+            "pass": true,
+            "fail": false,
+            "pending": false,
+            "code": "//const data = {};\nlet res = await chai.request(app).get('/getOrderById/'+orderId);\nexpect(res).to.have.status(200);\nconsole.log('Order Status  :  Confirmed');",
+            "err": {},
+            "isRoot": false,
+            "uuid": "41392d5b-d04d-4e3d-8413-90ac730e4893",
+            "isHook": false,
+            "skipped": false
+          }
+        ],
+        "suites": [],
+        "passes": [
+          "41392d5b-d04d-4e3d-8413-90ac730e4893"
+        ],
+        "failures": [],
+        "pending": [],
+        "skipped": [],
+        "duration": 625,
+        "root": false,
+        "rootEmpty": false,
+        "_timeout": 10000
+      }
+    ],
+    "passes": [],
+    "failures": [],
+    "pending": [],
+    "skipped": [],
+    "duration": 0,
+    "root": true,
+    "rootEmpty": true,
+    "_timeout": 10000
+  },
+  "copyrightYear": 2019
+}

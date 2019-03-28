@@ -1,5 +1,5 @@
 {
-  "name": "service-3",
+  "name": "service-2",
   "version": "1.0.0",
   "description": "Example of a single instance of a GraphQL microservice",
   "main": "server.js",

@@ -1,17 +1,17 @@
 type Order{
   _id:ID!
   orderId:Int
+  orderName:String
   orderDetails:String
+  orderQuantity:Int
   orderTotalAmt:Int
   orderDiscountAmt:Int
   orderGrandTotal:Int
   status:String
   isCancelled:Boolean
   isPaid:Boolean
-  createdBy:Int
+  createdBy:String
   createdDate:String
-  updatedBy:Int
-  updatedDate:String
 }
 
 

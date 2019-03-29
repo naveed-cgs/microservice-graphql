@@ -19,14 +19,15 @@ const fetch = require('node-fetch');
 		typeDefs,
 		resolvers
 	});
-
+	
 	const driver = neo4j.driver(
-		process.env.NEO4J_URI || "bolt://216.158.228.178:7687",
+		process.env.NEO4J_URI || "bolt://192.168.15.183:7687",
 		neo4j.auth.basic(
 			process.env.NEO4J_USER || "neo4j",
-			process.env.NEO4J_PASSWORD || "howru18"
+			process.env.NEO4J_PASSWORD || "Passw0rd19"
 		)
 	);
+	const PORT=process.env.Service_Port;
 	
 	const server = new ApolloServer({
 		context:  {driver} ,
@@ -43,22 +44,60 @@ const fetch = require('node-fetch');
 			Order{
 					_id
 					orderId
+					orderName
 					orderDetails
+					orderQuantity
 					orderTotalAmt
 					orderDiscountAmt
 					orderGrandTotal
 					status
 					isCancelled
 					isPaid
-		  			createdDate
 					createdBy
-					updatedBy
+		  			createdDate
 					}
 			}`;
-	fetch('http://localhost:8082/graphqlClient', {
+	fetch('http://localhost:'+PORT+'/graphqlClient', {
 		method: 'POST',
 		headers: { 'Content-Type': 'application/json' },
 		body: JSON.stringify({ query:query}),
+		// headers: {
+		//   'Authorization': `Bearer ${accessToken}`,
+		// },
+	  }).then(res => res.text())
+		.then(body => {res.send(body);})
+		.catch(error => console.error(error));
+	});
+
+	app.get('/getOrderByStatusAndPaid/:status/:isPaid', (req, res) => {
+		const query=`query getOrderByStatusAndPaid($status:String,$isPaid:Boolean){
+			Order(status:$status
+			isPaid:$isPaid
+			){
+			_id 
+			orderId 
+			orderName 
+			orderDetails 
+			orderQuantity 
+			orderTotalAmt 
+			orderDiscountAmt 
+			orderGrandTotal 
+			status 
+			isCancelled 
+			isPaid 
+			createdBy 
+			createdDate
+			}
+			}`;
+	const isPaid=false;
+	if(req.params.isPaid=="true" ||req.params.isPaid==true){
+		isPaid=true;
+	}
+	const variables={status:req.params.status,isPaid:isPaid};
+	fetch('http://localhost:'+PORT+'/graphqlClient', {
+		method: 'POST',
+		headers: { 'Content-Type': 'application/json' },
+		body: JSON.stringify({ query:query,variables:variables}),
 		// headers: {
 		//   'Authorization': `Bearer ${accessToken}`,
 		// },
@@ -73,20 +112,21 @@ const fetch = require('node-fetch');
 			Order(orderId:$orderId){
 					_id
 					orderId
+					orderName
 					orderDetails
+					orderQuantity
 					orderTotalAmt
 					orderDiscountAmt
 					orderGrandTotal
 					status
 					isCancelled
 					isPaid
-		  			createdDate
 					createdBy
-					updatedBy
+		  			createdDate
 					}
 			}`;
 		const variables={orderId:req.params.orderId};
-	fetch('http://localhost:8082/graphqlClient', {
+	fetch('http://localhost:'+PORT+'/graphqlClient', {
 		method: 'POST',
 		headers: { 'Content-Type': 'application/json' },
 		body: JSON.stringify({ query:query,variables:variables}),
@@ -113,20 +153,22 @@ const fetch = require('node-fetch');
 		
 		const query=`mutation(
 			$orderId:Int
+			$orderName:String
 			$orderDetails:String
+			$orderQuantity:Int
 			$orderTotalAmt:Int
 			$orderDiscountAmt:Int
 			$orderGrandTotal:Int
 			$status:String
 			$isCancelled:Boolean
 			$isPaid:Boolean
-			$createdBy:Int
-			$createdDate:String
-			$updatedBy:Int
-			$updatedDate:String) {
+			$createdBy:String
+			$createdDate:String) {
 			CreateOrder(
 						orderId:$orderId
-					    orderDetails:$orderDetails
+						orderName:$orderName
+						orderDetails:$orderDetails
+						orderQuantity:$orderQuantity
 						orderTotalAmt:$orderTotalAmt
 						orderDiscountAmt:$orderDiscountAmt
 						orderGrandTotal:$orderGrandTotal
@@ -135,12 +177,12 @@ const fetch = require('node-fetch');
 						isPaid:$isPaid
 						createdBy:$createdBy
 						createdDate:$createdDate
-						updatedBy:$updatedBy
-						updatedDate:$updatedDate
 			){
 			  _id
 			  orderId
+			  orderName
 			  orderDetails
+			  orderQuantity
 			  orderTotalAmt
 			  orderDiscountAmt
 			  orderGrandTotal
@@ -149,8 +191,6 @@ const fetch = require('node-fetch');
 			  isPaid
 			  createdBy
 			  createdDate
-			  updatedBy
-			  updatedDate
 			}
 		  }`;
 
@@ -164,7 +204,7 @@ const fetch = require('node-fetch');
 	}
 	variables.orderId=orderId;
 	
-	fetch('http://localhost:8082/graphqlClient', {
+	fetch('http://localhost:'+PORT+'/graphqlClient', {
 		method: 'POST',
 		headers: { 'Content-Type': 'application/json' },
 		body: JSON.stringify({ query:query,variables:variables}),
@@ -189,8 +229,10 @@ const fetch = require('node-fetch');
 				  isPaid:$isPaid
 					  ){
 				_id
-		        orderId
+				orderId
+				orderName
 				orderDetails
+				orderQuantity
 				orderTotalAmt
 				orderDiscountAmt
 				orderGrandTotal
@@ -199,12 +241,10 @@ const fetch = require('node-fetch');
 				isPaid
 				createdBy
 				createdDate
-				updatedBy
-				updatedDate
 			  }
 			}`;
 	const variables=req.body;
-	fetch('http://localhost:8082/graphqlClient', {
+	fetch('http://localhost:'+PORT+'/graphqlClient', {
 		method: 'POST',
 		headers: { 'Content-Type': 'application/json' },
 		body: JSON.stringify({ query:query,variables:variables}),
@@ -218,6 +258,6 @@ const fetch = require('node-fetch');
 
 
 	
-	app.listen({ port: 8082 }, () =>
-		console.log(`🚀 Server ready at http://localhost:8082${server.graphqlPath}`)
+	app.listen({ port: PORT }, () =>
+		console.log(`🚀 Server ready at http://localhost:${PORT}${server.graphqlPath}`)
 	)

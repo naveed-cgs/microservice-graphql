@@ -15,10 +15,10 @@ const  neo4j = require("neo4j-driver").v1;
 	.toString("utf-8");
 	
 	const driver = neo4j.driver(
-		process.env.NEO4J_URI || "bolt://216.158.228.178:7687",
+		process.env.NEO4J_URI || "bolt://192.168.15.183:7687",
 		neo4j.auth.basic(
 			process.env.NEO4J_USER || "neo4j",
-			process.env.NEO4J_PASSWORD || "howru18"
+			process.env.NEO4J_PASSWORD || "Passw0rd19"
 		)
 	);
 	let session = driver.session();

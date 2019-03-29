@@ -21,12 +21,15 @@ const fetch = require('node-fetch');
 	});
 
 	const driver = neo4j.driver(
-		process.env.NEO4J_URI || "bolt://216.158.228.178:7687",
+		process.env.NEO4J_URI || "bolt://192.168.15.183:7687",
 		neo4j.auth.basic(
 			process.env.NEO4J_USER || "neo4j",
-			process.env.NEO4J_PASSWORD || "howru18"
+			process.env.NEO4J_PASSWORD || "Passw0rd19"
 		)
 	);
+
+	const PORT=process.env.Service_Port;
+	const OrderAPP=process.env.Service_OrderApp;
 	
 	const server = new ApolloServer({
 		context:  {driver} ,
@@ -55,7 +58,7 @@ const fetch = require('node-fetch');
 					createdDate
 					}
 			}`;
-	fetch('http://localhost:8083/graphqlClient', {
+	fetch('http://localhost:'+PORT+'/graphqlClient', {
 		method: 'POST',
 		headers: { 'Content-Type': 'application/json' },
 		body: JSON.stringify({ query:query}),
@@ -128,7 +131,7 @@ const fetch = require('node-fetch');
 	variables.paymentId=paymentId;
 	
 	
-	await fetch('http://localhost:8083/graphqlClient', {
+	await fetch('http://localhost:'+PORT+'/graphqlClient', {
 		method: 'POST',
 		headers: { 'Content-Type': 'application/json' },
 		body: JSON.stringify({ query:query,variables:variables}),
@@ -150,7 +153,7 @@ const fetch = require('node-fetch');
 		.catch(error => console.error(error));
 	});
 async function updatePaymentStatus(updatereqobj){
-	await fetch('http://localhost:8082/updateOrder', {
+	await fetch(OrderAPP+'/updateOrder', {
 		method: 'POST',
 		headers: { 'Content-Type': 'application/json' },
 		body: JSON.stringify(updatereqobj),
@@ -168,5 +171,5 @@ async function updatePaymentStatus(updatereqobj){
 
 	
 	app.listen({ port: 8083 }, () =>
-		console.log(`🚀 Server ready at http://localhost:8083${server.graphqlPath}`)
+		console.log(`🚀 Server ready at http://localhost:${PORT}${server.graphqlPath}`)
 	)

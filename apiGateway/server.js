@@ -4,20 +4,29 @@ const appRootPath = require('app-root-path');
 const axios = require('axios');
 const jwt = require('jsonwebtoken');
 const bodyParser = require("body-parser");
-const {
-	orderApp,
-	paymentApp
-  } = require(appRootPath + '/config/config.json');
+const dotenv= require("dotenv");
+const fetch = require('node-fetch');
+		dotenv.config();
 
 
+const PORT=process.env.Service_Port;		
+
+
+const OrderApp=process.env.Service_OrderApp;
+const PaymentApp=process.env.Service_PaymentApp;
 
 app.use(bodyParser.urlencoded({
 	extended: true
   }));
   app.use(bodyParser.json());
 
-
-const PORT = 8081;
+	app.all('*', function(req, res, next) {
+		res.header("Access-Control-Allow-Origin", "*");
+		res.header('Access-Control-Allow-Methods', 'PUT, GET, POST, DELETE, OPTIONS'); 
+		res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+		next();
+	 });
+	 
 (async function () {
 	try {
 		//promise.all to grab all remote schemas at the same time, we do not care what order they come back but rather just when they finish
@@ -30,7 +39,7 @@ const PORT = 8081;
 			
 			try {
 			  Promise.all([
-				axios.post(`${orderApp}/saveOrder`, req.body),
+				axios.post(`${OrderApp}/saveOrder`, req.body),
 			  ]).then(values => {
 				//console.log({ data: values.map(resp => resp.data) })
 				res.json({ data: values.map(resp => resp.data) });
@@ -46,7 +55,7 @@ const PORT = 8081;
 		  app.post('/makePayment', (req, res) => {
 			try {
 			  Promise.all([
-				axios.post(`${paymentApp}/savePayment`, req.body),
+				axios.post(`${PaymentApp}/savePayment`, req.body),
 			  ]).then(values => {
 				res.json({ data: values.map(resp => resp.data) });
 			  }).catch(function (error) {
@@ -56,7 +65,22 @@ const PORT = 8081;
 			catch (err) {
 			  console.log('Error while get data : ' + err);
 			}
-		  });
+			});
+
+			app.post('/updateOrder', (req, res) => {
+				try {
+					Promise.all([
+					axios.post(`${OrderApp}/updateOrder`, req.body),
+					]).then(values => {
+					res.json({ data: values.map(resp => resp.data) });
+					}).catch(function (error) {
+					console.log(error.response);
+					});
+				}
+				catch (err) {
+					console.log('Error while get data : ' + err);
+				}
+				});
 
 		  app.get('/getOrderById/:orderId', (req, res) => {
 		
@@ -64,7 +88,7 @@ const PORT = 8081;
 			
 			try {
 			  Promise.all([
-				axios.get(`${orderApp}/getOrderStatus/${orderId}`)
+				axios.get(`${OrderApp}/getOrderStatus/${orderId}`)
 			  ]).then(values => {
 				
 				res.json({ data: values.map(resp => resp.data) });
@@ -75,7 +99,62 @@ const PORT = 8081;
 			catch (err) {
 			  console.log('Error while get data : ' + err);
 			}
-		  });
+			});
+			
+			app.get('/getOrderByStatusAndPaid/:status/:isPaid', (req, res) => {
+		
+				var status = req.params.status;
+				var isPaid = req.params.isPaid;
+				
+				try {
+					Promise.all([
+					axios.get(`${OrderApp}/getOrderByStatusAndPaid/${status}/${isPaid}`)
+					]).then(values => {
+					
+					res.json({ data: values.map(resp => resp.data) });
+					}).catch(function (error) {
+					console.log(error.response);
+					});
+				}
+				catch (err) {
+					console.log('Error while get data : ' + err);
+				}
+				});
+
+			app.get('/getAllOrder', (req, res) => {
+		
+				try {
+					Promise.all([
+					axios.get(`${OrderApp}/getAllOrder`)
+					]).then(values => {
+					res.json({ data: values.map(resp => resp.data) });
+					}).catch(function (error) {
+					console.log(error.response);
+					});
+				}
+				catch (err) {
+					console.log('Error while get data : ' + err);
+				}
+				});
+
+
+				app.get('/getAllPayment', (req, res) => {
+		
+					try {
+						Promise.all([
+						axios.get(`${PaymentApp}/getAllPayment`)
+						]).then(values => {
+						res.json({ data: values.map(resp => resp.data) });
+						}).catch(function (error) {
+						console.log(error.response);
+						});
+					}
+					catch (err) {
+						console.log('Error while get data : ' + err);
+					}
+					});
+
+
 
 		//start up a graphql endpoint for our main server
 		app.listen(PORT, () => console.log('GraphQL API listening on port:' + PORT));
